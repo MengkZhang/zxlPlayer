@@ -5,6 +5,8 @@ import android.util.AttributeSet
 import android.view.View
 import android.widget.RelativeLayout
 import com.hx.player.R
+import com.hx.player.model.Data
+import kotlinx.android.synthetic.main.item_home.view.*
 
 /**
  * Desc
@@ -14,6 +16,15 @@ import com.hx.player.R
  * Copyright © 川大智胜
  */
 class HomeItemView : RelativeLayout {
+    /**
+     * 设置数据
+     */
+    fun setData(data: Data) {
+        title.text = data.artistsname
+        desc.text = data.name
+
+    }
+
     constructor(context: Context?) : super(context)
     constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
     constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(

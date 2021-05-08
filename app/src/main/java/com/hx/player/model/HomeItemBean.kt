@@ -9,13 +9,24 @@ package com.hx.player.model
  */
 
 data class HomeItemBean(
+    val author: Author,
     val code: Int,
-    val `data`: Data
+    val `data`: List<Data>,
+    val msg: String
+)
+
+data class Author(
+    val desc: String,
+    val name: String
 )
 
 data class Data(
-    val artistsname: String,
-    val name: String,
-    val picurl: String,
-    val url: String
+    val digest: String,
+    val docid: String,
+    val imgsrc: String,
+    val m_url: String,
+    val pc_url: String,
+    val source: String,
+    val time: String,
+    val title: String
 )

@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.RelativeLayout
 import com.hx.player.R
 import com.hx.player.model.Data
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_home.view.*
 
 /**
@@ -20,9 +21,9 @@ class HomeItemView : RelativeLayout {
      * 设置数据
      */
     fun setData(data: Data) {
-        title.text = data.artistsname
-        desc.text = data.name
-
+        title.text = data.title
+        desc.text = data.digest
+        Picasso.with(context).load(data.imgsrc).into(bg)
     }
 
     constructor(context: Context?) : super(context)

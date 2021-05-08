@@ -3,7 +3,6 @@ package com.hx.player.ui.fragment
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import com.hx.player.R
 import com.hx.player.adapter.HomeAdapter
 import com.hx.player.base.BaseFragment
@@ -14,7 +13,7 @@ import com.hx.player.utils.URLProviderUtils
 import kotlinx.android.synthetic.main.fragment_list.*
 import okhttp3.*
 import java.io.IOException
-import java.util.ArrayList
+import java.util.*
 
 
 /**
@@ -45,7 +44,7 @@ class HomeFragment : BaseFragment() {
     }
 
     private fun loadData() {
-        val path = URLProviderUtils.getHomeUrl(0, 20)
+        val path = URLProviderUtils.getHomeUrl(1)
         val client = OkHttpClient()
         val request = Request.Builder()
             .url(path)
@@ -63,12 +62,10 @@ class HomeFragment : BaseFragment() {
              * onResponse 在子线程中执行
              */
             override fun onResponse(call: Call, response: Response) {
-                val json = Gson().fromJson(response.body()?.string(), HomeItemBean::class.java)
-                val bean: HomeItemBean = json
-                val data: Data = bean.data
-                var list = ArrayList<Data>()
-                for (index in 1..20) list.add(data)
-                ThreadUtil.runOnMainThread(Runnable { homeAdapter.updateData(list) })
+                val bean: HomeItemBean =
+                    Gson().fromJson(response.body()?.string(), HomeItemBean::class.java)
+
+                ThreadUtil.runOnMainThread(Runnable { homeAdapter.updateData(bean.data) })
 
             }
         })

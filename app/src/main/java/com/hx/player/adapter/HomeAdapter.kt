@@ -32,7 +32,7 @@ class HomeAdapter : RecyclerView.Adapter<HomeAdapter.HomeHolder>() {
         itemView.setData(data)
     }
 
-    fun updateData(list: ArrayList<Data>) {
+    fun updateData(list: List<Data>) {
         this.list.clear()
         this.list.addAll(list)
         notifyDataSetChanged()

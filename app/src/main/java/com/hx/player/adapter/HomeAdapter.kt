@@ -50,15 +50,20 @@ class HomeAdapter : RecyclerView.Adapter<HomeAdapter.HomeHolder>() {
         itemView.setData(data)
     }
 
-    fun updateData(list: List<Data>) {
-        this.list.clear()
-        this.list.addAll(list)
-        notifyDataSetChanged()
+    fun updateData(list: List<Data>?) {
+        //let表达式 相当于Java的list的判空
+        list?.let {
+            this.list.clear()
+            this.list.addAll(list)
+            notifyDataSetChanged()
+        }
     }
 
-    fun loadMoreData(list: List<Data>) {
-        this.list.addAll(list)
-        notifyDataSetChanged()
+    fun loadMoreData(list: List<Data>?) {
+        list?.let {
+            this.list.addAll(list)
+            notifyDataSetChanged()
+        }
     }
 
     class HomeHolder(itemView: View) : RecyclerView.ViewHolder(itemView)

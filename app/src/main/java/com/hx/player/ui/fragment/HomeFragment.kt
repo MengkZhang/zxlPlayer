@@ -3,16 +3,13 @@ package com.hx.player.ui.fragment
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.gson.Gson
 import com.hx.player.R
 import com.hx.player.adapter.HomeAdapter
 import com.hx.player.base.BaseFragment
-import com.hx.player.model.HomeItemBean
-import com.hx.player.utils.ThreadUtil
-import com.hx.player.utils.URLProviderUtils
+import com.hx.player.model.Data
+import com.hx.player.presenter.impl.HomePresenterImpl
+import com.hx.player.view.HomeView
 import kotlinx.android.synthetic.main.fragment_list.*
-import okhttp3.*
-import java.io.IOException
 
 
 /**
@@ -22,7 +19,10 @@ import java.io.IOException
  * Date 2021/5/8
  * Copyright © 川大智胜
  */
-class HomeFragment : BaseFragment() {
+class HomeFragment : BaseFragment(), HomeView {
+
+
+    private val presenter by lazy { HomePresenterImpl(this) }
 
     private val homeAdapter by lazy { HomeAdapter() }
     private var index = 1
@@ -38,7 +38,7 @@ class HomeFragment : BaseFragment() {
         recycleView.adapter = adapter
         refreshLayout.setOnRefreshListener {
             //刷新
-            loadData()
+            presenter.loadData()
         }
 
         recycleView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -52,8 +52,7 @@ class HomeFragment : BaseFragment() {
                         if (lastVisibleItemPosition == adapter.itemCount - 1) {
                             //加载更多
                             index++
-//                            loadMoreData(adapter.itemCount - 1)
-                            loadMoreData(index)
+                            presenter.loadMoreData(index)
                         }
                     }
                 }
@@ -66,78 +65,23 @@ class HomeFragment : BaseFragment() {
 
     override fun initData() {
         super.initData()
-        loadData()
+        presenter.loadData()
     }
 
-    private fun loadData() {
-        index = 1;
-        val path = URLProviderUtils.getHomeUrl(index)
-        val client = OkHttpClient()
-        val request = Request.Builder()
-            .url(path)
-            .get()
-            .build()
-        client.newCall(request).enqueue(object : Callback {
-            /**
-             * onFailure 在子线程中执行
-             */
-            override fun onFailure(call: Call, e: IOException) {
-                ThreadUtil.runOnMainThread(Runnable { refreshLayout.isRefreshing = false })
-                myToast("失败")
-            }
-
-            /**
-             * onResponse 在子线程中执行
-             */
-            override fun onResponse(call: Call, response: Response) {
-
-                val bean: HomeItemBean =
-                    Gson().fromJson(response.body()?.string(), HomeItemBean::class.java)
-
-                ThreadUtil.runOnMainThread(Runnable {
-                    refreshLayout.isRefreshing = false
-                    homeAdapter.updateData(bean.data)
-                })
-
-            }
-        })
-
+    override fun onError(message: String?) {
+        refreshLayout.isRefreshing = false
+        myToast("加载数据失败")
 
     }
 
-    private fun loadMoreData(offSet: Int) {
-        val path = URLProviderUtils.getHomeUrl(offSet)
-        val client = OkHttpClient()
-        val request = Request.Builder()
-            .url(path)
-            .get()
-            .build()
-        client.newCall(request).enqueue(object : Callback {
-            /**
-             * onFailure 在子线程中执行
-             */
-            override fun onFailure(call: Call, e: IOException) {
-                ThreadUtil.runOnMainThread(Runnable { refreshLayout.isRefreshing = false })
-                myToast("失败")
-            }
+    override fun loadSuccess(data: List<Data>?) {
+        refreshLayout.isRefreshing = false
+        homeAdapter.updateData(data)
+    }
 
-            /**
-             * onResponse 在子线程中执行
-             */
-            override fun onResponse(call: Call, response: Response) {
-
-                val bean: HomeItemBean =
-                    Gson().fromJson(response.body()?.string(), HomeItemBean::class.java)
-
-                ThreadUtil.runOnMainThread(Runnable {
-                    refreshLayout.isRefreshing = false
-                    homeAdapter.loadMoreData(bean.data)
-                })
-
-            }
-        })
-
-
+    override fun loadMoreSuccess(data: List<Data>?) {
+        refreshLayout.isRefreshing = false
+        homeAdapter.loadMoreData(data)
     }
 
 

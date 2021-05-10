@@ -4,7 +4,6 @@ import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.hx.player.R
-import com.hx.player.presenter.impl.HomePresenterImpl
 import kotlinx.android.synthetic.main.fragment_list.*
 
 
@@ -23,7 +22,7 @@ abstract class BaseListFragment<RESPONSE, ITEMBEAN, ITEMVIEW : View> : BaseFragm
     BaseView<RESPONSE> {
 
 
-    private val presenter by lazy { getSpecialPresenter() }
+    protected val presenter by lazy { getSpecialPresenter() }
 
     private val adapter by lazy { getSpecialAdapter() }
     private var index = 1

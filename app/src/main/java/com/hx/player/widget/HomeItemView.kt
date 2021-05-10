@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.RelativeLayout
 import com.hx.player.R
 import com.hx.player.model.Data
+import com.hx.player.model.YueDanBean
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_home.view.*
 
@@ -24,6 +25,12 @@ class HomeItemView : RelativeLayout {
         title.text = data?.title
         desc.text = data?.digest
         Picasso.with(context).load(data?.imgsrc).into(bg)
+    }
+
+    fun setData(data: YueDanBean.Data?) {
+        title.text = data?.title
+        desc.text = data?.source
+        Picasso.with(context).load(data?.picUrl).into(bg)
     }
 
     constructor(context: Context?) : super(context)

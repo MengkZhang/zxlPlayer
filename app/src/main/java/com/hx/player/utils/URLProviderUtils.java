@@ -20,6 +20,11 @@ public class URLProviderUtils {
         //"https://api.uomg.com/api/rand.music?sort=热歌榜&format=json"
         return url;
     }
+    public static String getYueDanUrl(int offset) {
+        String url = "https://v1.alapi.cn/api/new/hanfu?num=10&page=" + offset;
+        Log.i("Main_url", url);
+        return url;
+    }
 
     public static String getMVareaUrl() {
         String url = "http://mapi.yinyuetai.com/video/get_mv_areas.json?deviceinfo="

@@ -1,6 +1,5 @@
 package com.hx.player.presenter.impl
 
-import com.hx.player.base.BaseView
 import com.hx.player.model.HomeItemBean
 import com.hx.player.net.HomeRequest
 import com.hx.player.net.ResponseHandler

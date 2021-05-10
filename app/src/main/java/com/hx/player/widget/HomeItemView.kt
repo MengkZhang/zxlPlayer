@@ -20,10 +20,10 @@ class HomeItemView : RelativeLayout {
     /**
      * 设置数据
      */
-    fun setData(data: Data) {
-        title.text = data.title
-        desc.text = data.digest
-        Picasso.with(context).load(data.imgsrc).into(bg)
+    fun setData(data: Data?) {
+        title.text = data?.title
+        desc.text = data?.digest
+        Picasso.with(context).load(data?.imgsrc).into(bg)
     }
 
     constructor(context: Context?) : super(context)

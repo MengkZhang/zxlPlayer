@@ -1,5 +1,7 @@
 package com.hx.player.presenter.interfaces
 
+import com.hx.player.base.BaseListPresenter
+
 /**
  * Desc
  *
@@ -7,7 +9,5 @@ package com.hx.player.presenter.interfaces
  * Date 2021/5/10
  * Copyright © 川大智胜
  */
-interface HomePresenter {
-    fun loadData()
-    fun loadMoreData(index: Int)
+interface HomePresenter : BaseListPresenter {
 }

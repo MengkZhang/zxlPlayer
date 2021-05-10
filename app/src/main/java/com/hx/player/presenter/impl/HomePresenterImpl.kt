@@ -2,7 +2,6 @@ package com.hx.player.presenter.impl
 
 import com.hx.player.model.HomeItemBean
 import com.hx.player.net.HomeRequest
-import com.hx.player.net.NetManager
 import com.hx.player.net.ResponseHandler
 import com.hx.player.presenter.interfaces.HomePresenter
 import com.hx.player.view.HomeView
@@ -17,7 +16,7 @@ import com.hx.player.view.HomeView
  */
 class HomePresenterImpl(var homeView: HomeView) : HomePresenter {
     override fun loadData() {
-        val homeRequest = HomeRequest(1, object : ResponseHandler<HomeItemBean> {
+        HomeRequest(1, object : ResponseHandler<HomeItemBean> {
             override fun onError(msg: String?) {
                 homeView.onError(msg)
 
@@ -26,8 +25,7 @@ class HomePresenterImpl(var homeView: HomeView) : HomePresenter {
             override fun onSuccess(result: HomeItemBean?) {
                 homeView.loadSuccess(result?.data)
             }
-        })
-        NetManager.netManager.sendRequest(homeRequest)
+        }).execute()
 
     }
 
@@ -69,7 +67,7 @@ class HomePresenterImpl(var homeView: HomeView) : HomePresenter {
 
     override fun loadMoreData(index: Int) {
 
-        val homeRequest = HomeRequest(index, object : ResponseHandler<HomeItemBean> {
+        HomeRequest(index, object : ResponseHandler<HomeItemBean> {
             override fun onError(msg: String?) {
                 homeView.onError(msg)
 
@@ -78,8 +76,7 @@ class HomePresenterImpl(var homeView: HomeView) : HomePresenter {
             override fun onSuccess(result: HomeItemBean?) {
                 homeView.loadMoreSuccess(result?.data)
             }
-        })
-        NetManager.netManager.sendRequest(homeRequest)
+        }).execute()
     }
 
 //    override fun loadMoreData(index: Int) {

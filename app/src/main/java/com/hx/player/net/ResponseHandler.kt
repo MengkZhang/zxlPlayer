@@ -8,7 +8,7 @@ package com.hx.player.net
  * Date 2021/5/10
  * Copyright © 川大智胜
  */
-interface ResponsHandler<RESPONSE> {
+interface ResponseHandler<RESPONSE> {
     fun onError(msg: String?)
-    fun onSuccess(result: RESPONSE)
+    fun onSuccess(result: RESPONSE?)
 }

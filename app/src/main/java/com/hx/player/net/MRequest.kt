@@ -10,11 +10,12 @@ import java.lang.reflect.ParameterizedType
  * Date 2021/5/10
  * Copyright © 川大智胜
  */
-class MRequest<RESPONSE>(val url: String, val handler: ResponsHandler<RESPONSE>) {
+open class MRequest<RESPONSE>(val url: String, val handler: ResponseHandler<RESPONSE>) {
     fun parseResult(string: String?): RESPONSE {
         //获取泛型类型
-        val type = (this.javaClass.genericInterfaces as ParameterizedType).actualTypeArguments[0]
-        return Gson().fromJson(string, type)
+        val type = (this.javaClass.genericSuperclass as ParameterizedType).actualTypeArguments[0]
+        val data = Gson().fromJson<RESPONSE>(string, type)
+        return data
     }
 
 }

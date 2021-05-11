@@ -72,19 +72,19 @@ abstract class BaseListFragment<RESPONSE, ITEMBEAN, ITEMVIEW : View> : BaseFragm
     }
 
     override fun onError(message: String?) {
-        refreshLayout.isRefreshing = false
-        myToast("加载数据失败")
+        refreshLayout?.isRefreshing = false
+        myToast(message)
 
     }
 
     override fun loadSuccess(data: RESPONSE?) {
-        refreshLayout.isRefreshing = false
+        refreshLayout?.isRefreshing = false
         adapter.updateData(getList(data))
 
     }
 
     override fun loadMoreSuccess(data: RESPONSE?) {
-        refreshLayout.isRefreshing = false
+        refreshLayout?.isRefreshing = false
         adapter.loadMoreData(getList(data))
     }
 

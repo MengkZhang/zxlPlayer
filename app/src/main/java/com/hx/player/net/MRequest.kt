@@ -14,8 +14,7 @@ open class MRequest<RESPONSE>(val url: String, val handler: ResponseHandler<RESP
     fun parseResult(string: String?): RESPONSE {
         //获取泛型类型
         val type = (this.javaClass.genericSuperclass as ParameterizedType).actualTypeArguments[0]
-        val data = Gson().fromJson<RESPONSE>(string, type)
-        return data
+        return Gson().fromJson(string, type)
     }
 
     /**

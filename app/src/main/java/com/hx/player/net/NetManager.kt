@@ -2,6 +2,7 @@ package com.hx.player.net
 
 import com.hx.player.utils.ThreadUtil
 import okhttp3.*
+import org.json.JSONObject
 import java.io.IOException
 
 /**
@@ -49,11 +50,25 @@ class NetManager private constructor() {
              */
             override fun onResponse(call: Call, response: Response) {
 
-                val parseResult = req.parseResult(response.body()?.string())
+                val result = response.body()?.string()
 
-                ThreadUtil.runOnMainThread(Runnable {
-                    req.handler.onSuccess(parseResult)
-                })
+                result?.let {
+                    val obj = JSONObject(result)
+                    val code = obj.getString("code")
+                    if ("200" == code) {
+                        val parseResult = req.parseResult(result)
+
+                        ThreadUtil.runOnMainThread(Runnable {
+                            req.handler.onSuccess(parseResult)
+                        })
+                    } else {
+                        ThreadUtil.runOnMainThread(Runnable {
+                            req.handler.onError(obj.getString("msg"))
+                        })
+                    }
+
+                }
+
 
             }
         })

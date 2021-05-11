@@ -56,9 +56,11 @@ abstract class BaseFragment : Fragment(), AnkoLogger {
 
     }
 
-    protected fun myToast(msg: String) {
+    protected fun myToast(msg: String?) {
         context?.runOnUiThread {
-            toast(msg)
+            msg?.let {
+                toast(msg)
+            }
         }
     }
 }

@@ -19,6 +19,7 @@ abstract class BaseListAdapter<ITEMBEAN, ITEMVIEW : View> :
 
     private var list: ArrayList<ITEMBEAN> = ArrayList()
 
+
     override fun getItemViewType(position: Int): Int {
         return if (position == list.size) {
             1
@@ -30,7 +31,8 @@ abstract class BaseListAdapter<ITEMBEAN, ITEMVIEW : View> :
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseListHolder {
         return if (viewType == 1) {
             //最后一条 加载更多
-            BaseListHolder(LoadMoreView(parent.context))
+            val loadMoreView = LoadMoreView(parent.context)
+            BaseListHolder(loadMoreView)
         } else {
             //item
             BaseListHolder(getItemView(parent.context))

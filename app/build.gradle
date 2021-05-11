@@ -42,8 +42,16 @@ dependencies {
     compile 'com.squareup.okhttp3:okhttp:3.8.1'
     implementation 'com.google.code.gson:gson:2.2.4'
     //picasso
-    compile 'com.squareup.picasso:picasso:2.5.2'
+    implementation 'com.squareup.picasso:picasso:2.5.2'
     //picasso-transformations
-    compile 'jp.wasabeef:picasso-transformations:2.1.2'
+    implementation 'jp.wasabeef:picasso-transformations:2.1.2'
+
+
+    //bmob后端云
+    implementation 'io.github.bmob:android-sdk:3.8.4'
+    implementation "io.reactivex.rxjava2:rxjava:2.2.8"
+    implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
+    implementation 'com.squareup.okio:okio:2.2.2'
+    implementation 'com.google.code.gson:gson:2.8.5'
 
 }

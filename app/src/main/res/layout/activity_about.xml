@@ -4,10 +4,17 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <include layout="@layout/toolbar"/>
+    <include layout="@layout/toolbar" />
 
-    <TextView
+    <Button
+        android:id="@+id/btnAddData"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="这是一款免费的视频播放器" />
+        android:layout_height="wrap_content"
+        android:text="增加数据" />
+
+    <Button
+        android:id="@+id/btnFindData"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="查询数据" />
 </LinearLayout>

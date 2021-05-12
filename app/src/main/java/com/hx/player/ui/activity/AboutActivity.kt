@@ -5,17 +5,13 @@ import androidx.appcompat.widget.Toolbar
 import cn.bmob.v3.BmobQuery
 import cn.bmob.v3.exception.BmobException
 import cn.bmob.v3.listener.FindListener
-import cn.bmob.v3.listener.QueryListListener
-import cn.bmob.v3.listener.QueryListener
 import cn.bmob.v3.listener.SaveListener
 import com.hx.player.R
 import com.hx.player.base.BaseActivity
-import com.hx.player.config.AppConfig
 import com.hx.player.model.bmobModel.Home
 import com.hx.player.utils.ToolBarManager
 import kotlinx.android.synthetic.main.activity_about.*
 import org.jetbrains.anko.find
-import android.util.Log.e as e1
 
 /**
  * Desc

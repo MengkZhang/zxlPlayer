@@ -7,6 +7,7 @@ import android.widget.RelativeLayout
 import com.hx.player.R
 import com.hx.player.model.Data
 import com.hx.player.model.YueDanBean
+import com.hx.player.model.bmobModel.VideoListByTab
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_home.view.*
 
@@ -31,6 +32,12 @@ class HomeItemView : RelativeLayout {
         title.text = data?.title
         desc.text = data?.source
         Picasso.with(context).load(data?.picUrl).into(bg)
+    }
+
+    fun setData(data: VideoListByTab?) {
+        title.text = data?.objectId
+        desc.text = data?.descriptionPgc
+        Picasso.with(context).load(data?.detail).into(bg)
     }
 
     constructor(context: Context?) : super(context)

@@ -24,7 +24,7 @@ abstract class BaseBmobListFragment<ITEMBEAN, ITEMVIEW : View> : BaseFragment(),
 
     protected val presenter by lazy { getSpecialPresenter() }
 
-    private val adapter by lazy { getSpecialAdapter() }
+    protected val adapter by lazy { getSpecialAdapter() }
     private var index = 1
 
     abstract fun getSpecialPresenter(): BaseListPresenter

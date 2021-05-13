@@ -51,6 +51,17 @@ abstract class BaseListAdapter<ITEMBEAN, ITEMVIEW : View> :
         val data: ITEMBEAN = list.get(position)
         val itemView: ITEMVIEW = holder.itemView as ITEMVIEW
         refreshView(itemView, data)
+
+        itemView.setOnClickListener {
+            listener?.invoke(data)
+        }
+    }
+
+    //定义函数类型变量
+    var listener: ((itemBean: ITEMBEAN) -> Unit)? = null
+
+    fun setMyListener(listener: (itemBean: ITEMBEAN) -> Unit) {
+        this.listener = listener
     }
 
 

@@ -45,6 +45,7 @@ dependencies {
     implementation 'com.squareup.picasso:picasso:2.5.2'
     //picasso-transformations
     implementation 'jp.wasabeef:picasso-transformations:2.1.2'
+    implementation 'cn.jzvd:jiaozivideoplayer:6.2.12'
 
 
     //bmob后端云

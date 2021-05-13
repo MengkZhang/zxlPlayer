@@ -27,7 +27,7 @@ class NetManager private constructor() {
     /**
      * 定义函数的泛型
      */
-    fun <RESPONSE> sendRequest(req: MRequest<RESPONSE>) {
+    fun <RESPONSE> sendRequest(type: Int, req: MRequest<RESPONSE>) {
         val path = req.url
         val request = Request.Builder()
             .url(path)
@@ -63,7 +63,12 @@ class NetManager private constructor() {
                         })
                     } else {
                         ThreadUtil.runOnMainThread(Runnable {
-                            req.handler.onError(obj.getString("msg"))
+                            if (type == 0) {
+                                req.handler.onError(obj.getString("msg"))
+                            } else {
+                                req.handler.onError(obj.getString("message"))
+
+                            }
                         })
                     }
 

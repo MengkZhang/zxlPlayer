@@ -21,7 +21,11 @@ open class MRequest<RESPONSE>(val url: String, val handler: ResponseHandler<RESP
      * 发送网络请求
      */
     fun execute() {
-        NetManager.netManager.sendRequest(this)
+        NetManager.netManager.sendRequest(0, this)
+    }
+
+    fun executed() {
+        NetManager.netManager.sendRequest(1, this)
     }
 
 }

@@ -17,4 +17,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="查询数据" />
+
+    <Button
+        android:id="@+id/btnGetTestMvTab"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="查询test mv数据" />
+
+    <Button
+        android:id="@+id/btnGetTestVideoList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="获取野生视频列表List数据" />
 </LinearLayout>

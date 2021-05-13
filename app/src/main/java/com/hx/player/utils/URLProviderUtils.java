@@ -20,8 +20,21 @@ public class URLProviderUtils {
         //"https://api.uomg.com/api/rand.music?sort=热歌榜&format=json"
         return url;
     }
+
     public static String getYueDanUrl(int offset) {
         String url = "https://v1.alapi.cn/api/new/hanfu?num=10&page=" + offset;
+        Log.i("Main_url", url);
+        return url;
+    }
+
+    public static String getTestMvTab() {
+        String url = "https://api.apiopen.top/videoCategory";
+        Log.i("Main_url", url);
+        return url;
+    }
+
+    public static String getTestMvListByTab(String id) {
+        String url = "https://api.apiopen.top/videoRecommend?id=" + id;
         Log.i("Main_url", url);
         return url;
     }

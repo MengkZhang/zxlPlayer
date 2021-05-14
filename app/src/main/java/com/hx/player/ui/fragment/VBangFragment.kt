@@ -16,9 +16,12 @@ import com.hx.player.R
 import com.hx.player.adapter.VbangAdapter
 import com.hx.player.base.BaseActivity
 import com.hx.player.base.BaseFragment
+import com.hx.player.model.AudioBean
+import com.hx.player.ui.activity.AudioPlayActivity
 import com.hx.player.utils.CursorUtil
 import kotlinx.android.synthetic.main.fragment_vbang.*
 import org.jetbrains.anko.alert
+import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.yesButton
 
 /**
@@ -44,6 +47,14 @@ class VBangFragment : BaseFragment() {
         super.initListener()
         adapter = VbangAdapter(context, null)
         listView.adapter = adapter
+        listView.setOnItemClickListener { parent, view, position, id ->
+            val cursor = adapter?.getItem(position) as Cursor
+            val list: ArrayList<AudioBean> = AudioBean.getAudioBeans(cursor)
+            (context as BaseActivity).startActivity<AudioPlayActivity>(
+                "item" to list,
+                "position" to position
+            )
+        }
     }
 
     /**
@@ -120,7 +131,8 @@ class VBangFragment : BaseFragment() {
 
     }
 
-    inner class SongHandler(cr: ContentResolver?) : AsyncQueryHandler(cr) {
+    companion object
+    class SongHandler(cr: ContentResolver?) : AsyncQueryHandler(cr) {
         override fun onQueryComplete(token: Int, cookie: Any?, cursor: Cursor?) {
             super.onQueryComplete(token, cookie, cursor)
             CursorUtil.logCursor(cursor)

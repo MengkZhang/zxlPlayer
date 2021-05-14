@@ -7,6 +7,6 @@ package com.hx.player.service
  * Date 2021/5/14
  * Copyright © 川大智胜
  */
-interface Iservice {
+interface IService {
     fun playItem()
 }

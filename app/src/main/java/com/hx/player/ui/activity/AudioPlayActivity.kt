@@ -4,18 +4,19 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
-import android.media.MediaPlayer
 import android.os.IBinder
 import com.hx.player.R
 import com.hx.player.base.BaseActivity
 import com.hx.player.model.AudioBean
 import com.hx.player.service.AudioService
+import com.hx.player.service.IService
 
 /**
  * 音乐播放页
  */
 class AudioPlayActivity : BaseActivity() {
     private val connection by lazy { AudioConnection() }
+    private var iService: IService? = null
 
     override fun getLayoutView(): Int {
         return R.layout.activity_audio_player
@@ -41,7 +42,7 @@ class AudioPlayActivity : BaseActivity() {
 
     }
 
-    class AudioConnection : ServiceConnection {
+    inner class AudioConnection : ServiceConnection {
         /**
          * 服务意外断开连接
          */
@@ -53,8 +54,13 @@ class AudioPlayActivity : BaseActivity() {
          * 服务连接成功
          */
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
-
+            iService = service as IService
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        unbindService(connection)
     }
 
 }

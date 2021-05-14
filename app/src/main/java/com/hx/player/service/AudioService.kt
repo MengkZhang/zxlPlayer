@@ -26,19 +26,26 @@ class AudioService : Service() {
         super.onCreate()
     }
 
+    /**
+     * onStartCommand
+     *
+     *START_STICKY   粘性的  service强制杀死之后 会尝试重新启动service 不会传递原来的intent(null)
+     *START_NOT_STICKY 非粘性的 service强制杀死之后 不会尝试重新启动service
+     *START_REDELIVER_INTENT service强制杀死之后 会尝试重新启动service  会传递原来的intent
+     */
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         list = intent?.getParcelableArrayListExtra("list")
         position = intent?.getIntExtra("position", -1) ?: -1
         //开始播放
         audioBinder.playItem()
-        return super.onStartCommand(intent, flags, startId)
+        return START_NOT_STICKY
     }
 
     override fun onBind(intent: Intent?): IBinder? {
         return audioBinder
     }
 
-    inner class AudioBinder : Binder(), Iservice, MediaPlayer.OnPreparedListener {
+    inner class AudioBinder : Binder(), IService, MediaPlayer.OnPreparedListener {
         override fun onPrepared(mp: MediaPlayer?) {
             mediaPlayer?.start()
         }

@@ -4,6 +4,7 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
+import android.graphics.drawable.AnimationDrawable
 import android.os.IBinder
 import android.view.View
 import androidx.lifecycle.Observer
@@ -15,6 +16,7 @@ import com.hx.player.service.AudioService
 import com.hx.player.service.IService
 import com.jeremyliao.liveeventbus.LiveEventBus
 import kotlinx.android.synthetic.main.activity_music_player_bottom.*
+import kotlinx.android.synthetic.main.activity_music_player_middle.*
 import kotlinx.android.synthetic.main.activity_music_player_top.*
 
 /**
@@ -24,6 +26,7 @@ class AudioPlayActivity : BaseActivity(), View.OnClickListener {
 
 
     private val connection by lazy { AudioConnection() }
+    private val anim by lazy { audio_anim.drawable as AnimationDrawable }
     private var iService: IService? = null
     private var audioBean: AudioBean? = null
 
@@ -61,9 +64,14 @@ class AudioPlayActivity : BaseActivity(), View.OnClickListener {
 
     private fun updateSongInfo(audioBean: AudioBean?) {
         this.audioBean = audioBean
-        //更新歌曲名
+        //更新歌曲信息
         audio_title.text = audioBean?.display_name
         artist.text = audioBean?.artist
+        //跟新播放按钮状态
+        state.setImageResource(R.drawable.selector_btn_audio_play)
+//        updatePlayState()
+        //更新帧动画
+        anim.start()
 
     }
 
@@ -111,16 +119,18 @@ class AudioPlayActivity : BaseActivity(), View.OnClickListener {
      * 更新图标
      */
     private fun updatePlayStateButton() {
-        //获取当前播放状态 这个是点击后的状态
+        //获取当前播放状态 这个是点击后的状态 执行了上一个方法后已经改变了播放状态
         val isPlaying = iService?.isPlaying()
         //根据状态更新图标
         isPlaying?.let {
             if (it) {
                 //正在播放 展示播放的按钮
                 state.setImageResource(R.drawable.selector_btn_audio_play)
+                anim.start()
             } else {
                 //正在暂停 展示暂停的按钮
                 state.setImageResource(R.drawable.selector_btn_audio_pause)
+                anim.stop()
             }
         }
     }

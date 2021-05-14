@@ -9,4 +9,13 @@ package com.hx.player.service
  */
 interface IService {
     fun playItem()
+    /**
+     * 更细播放状态
+     */
+    fun updatePlayState()
+
+    /**
+     * 获取播放状态
+     */
+    fun isPlaying(): Boolean?
 }

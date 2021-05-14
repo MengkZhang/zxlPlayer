@@ -18,4 +18,14 @@ interface IService {
      * 获取播放状态
      */
     fun isPlaying(): Boolean?
+
+    /**
+     * 获取总进度
+     */
+    fun getDuration(): Int
+
+    /**
+     * 获取当前进度
+     */
+    fun getProgress(): Int
 }

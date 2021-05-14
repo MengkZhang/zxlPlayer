@@ -51,6 +51,7 @@ class AudioPlayActivity : BaseActivity(), View.OnClickListener {
     override fun initListener() {
         super.initListener()
         state.setOnClickListener(this)
+        back.setOnClickListener(this)
         initEventBus()
     }
 
@@ -72,6 +73,8 @@ class AudioPlayActivity : BaseActivity(), View.OnClickListener {
 //        updatePlayState()
         //更新帧动画
         anim.start()
+        //获取总进度
+        iService?.getDuration()
 
     }
 
@@ -99,6 +102,7 @@ class AudioPlayActivity : BaseActivity(), View.OnClickListener {
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.state -> updatePlayState()
+            R.id.back -> finish()
         }
 
     }

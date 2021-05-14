@@ -6,12 +6,16 @@ import android.content.Intent
 import android.content.ServiceConnection
 import android.os.IBinder
 import android.view.View
+import androidx.lifecycle.Observer
 import com.hx.player.R
 import com.hx.player.base.BaseActivity
+import com.hx.player.config.EventBusConstant
 import com.hx.player.model.AudioBean
 import com.hx.player.service.AudioService
 import com.hx.player.service.IService
+import com.jeremyliao.liveeventbus.LiveEventBus
 import kotlinx.android.synthetic.main.activity_music_player_bottom.*
+import kotlinx.android.synthetic.main.activity_music_player_top.*
 
 /**
  * 音乐播放页
@@ -21,6 +25,7 @@ class AudioPlayActivity : BaseActivity(), View.OnClickListener {
 
     private val connection by lazy { AudioConnection() }
     private var iService: IService? = null
+    private var audioBean: AudioBean? = null
 
     override fun getLayoutView(): Int {
         return R.layout.activity_audio_player
@@ -43,6 +48,23 @@ class AudioPlayActivity : BaseActivity(), View.OnClickListener {
     override fun initListener() {
         super.initListener()
         state.setOnClickListener(this)
+        initEventBus()
+    }
+
+    private fun initEventBus() {
+        //接收事件 更新UI
+        LiveEventBus
+            .get(EventBusConstant.NOTIFY_CHANGE_UI, AudioBean::class.java)
+            .observe(this, Observer<AudioBean> { audioBean -> updateSongInfo(audioBean) })
+
+    }
+
+    private fun updateSongInfo(audioBean: AudioBean?) {
+        this.audioBean = audioBean
+        //更新歌曲名
+        audio_title.text = audioBean?.display_name
+        artist.text = audioBean?.artist
+
     }
 
     inner class AudioConnection : ServiceConnection {

@@ -5,7 +5,9 @@ import android.content.Intent
 import android.media.MediaPlayer
 import android.os.Binder
 import android.os.IBinder
+import com.hx.player.config.EventBusConstant
 import com.hx.player.model.AudioBean
+import com.jeremyliao.liveeventbus.LiveEventBus
 
 /**
  * Desc
@@ -67,7 +69,10 @@ class AudioService : Service() {
         }
 
         override fun onPrepared(mp: MediaPlayer?) {
+            //播放音乐
             mediaPlayer?.start()
+            //通知界面更新
+            notifyChangeUI(list?.get(position))
         }
 
         override fun playItem() {
@@ -78,5 +83,13 @@ class AudioService : Service() {
                 it.prepareAsync()
             }
         }
+
+        /**
+         * 通知界面更新UI
+         */
+        private fun notifyChangeUI(value: AudioBean?) {
+            LiveEventBus.get(EventBusConstant.NOTIFY_CHANGE_UI).post(value)
+        }
+
     }
 }

@@ -46,6 +46,7 @@ dependencies {
     //picasso-transformations
     implementation 'jp.wasabeef:picasso-transformations:2.1.2'
     implementation 'cn.jzvd:jiaozivideoplayer:6.2.12'
+    implementation 'com.jeremyliao:live-event-bus-x:1.7.2'
 
 
     //bmob后端云

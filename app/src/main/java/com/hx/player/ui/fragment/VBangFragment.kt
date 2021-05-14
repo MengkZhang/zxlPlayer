@@ -3,14 +3,10 @@ package com.hx.player.ui.fragment
 import android.Manifest
 import android.content.AsyncQueryHandler
 import android.content.ContentResolver
-import android.content.Context
 import android.content.pm.PackageManager
 import android.database.Cursor
-import android.graphics.Color
 import android.provider.MediaStore
-import android.view.Gravity
 import android.view.View
-import android.widget.TextView
 import androidx.core.app.ActivityCompat
 import com.hx.player.R
 import com.hx.player.adapter.VbangAdapter

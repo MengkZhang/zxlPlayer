@@ -54,6 +54,7 @@
             android:name="cn.bmob.v3.util.BmobContentProvider"
             android:authorities="com.hx.player.BmobContentProvider" />
 
+        <service android:name=".service.AudioService" />
     </application>
 
 </manifest>

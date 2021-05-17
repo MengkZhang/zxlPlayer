@@ -29,5 +29,10 @@ interface IService {
      */
     fun getProgress(): Int?
 
+    /**
+     * 手机拖动进度
+     */
+    fun seekTo(progress: Int)
+
 
 }

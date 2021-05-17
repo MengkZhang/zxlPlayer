@@ -10,6 +10,7 @@ import android.os.Handler
 import android.os.IBinder
 import android.os.Message
 import android.view.View
+import android.widget.SeekBar
 import androidx.lifecycle.Observer
 import com.hx.player.R
 import com.hx.player.base.BaseActivity
@@ -22,13 +23,12 @@ import com.jeremyliao.liveeventbus.LiveEventBus
 import kotlinx.android.synthetic.main.activity_music_player_bottom.*
 import kotlinx.android.synthetic.main.activity_music_player_middle.*
 import kotlinx.android.synthetic.main.activity_music_player_top.*
-import java.lang.ref.WeakReference
 
 
 /**
  * 音乐播放页
  */
-class AudioPlayActivity : BaseActivity(), View.OnClickListener {
+class AudioPlayActivity : BaseActivity(), View.OnClickListener, SeekBar.OnSeekBarChangeListener {
 
 
     private val connection by lazy { AudioConnection() }
@@ -59,6 +59,7 @@ class AudioPlayActivity : BaseActivity(), View.OnClickListener {
         super.initListener()
         state.setOnClickListener(this)
         back.setOnClickListener(this)
+        progress_sk.setOnSeekBarChangeListener(this)
         initEventBus()
     }
 
@@ -115,9 +116,11 @@ class AudioPlayActivity : BaseActivity(), View.OnClickListener {
      */
     private fun updateProgress(pro: Int) {
         //更新进度数值
-        progress.text = StringUtil.parseDuration(pro) + "/" + StringUtil.parseDuration(duration)
+        val current = StringUtil.parseDuration(pro)
+        val total = StringUtil.parseDuration(duration)
+        progress.text = "$current/$total"
         //更新进度条
-        progress_sk.progress = pro
+        progress_sk?.progress = pro
         //定时获取播放进度
 
     }
@@ -185,5 +188,24 @@ class AudioPlayActivity : BaseActivity(), View.OnClickListener {
             }
         }
     }
+
+    override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+        if (!fromUser) {
+            return
+        }
+
+        //更新播放进度
+        iService?.seekTo(progress)
+        //更新界面进度
+        updateProgress(progress)
+
+    }
+
+    override fun onStartTrackingTouch(seekBar: SeekBar?) {
+    }
+
+    override fun onStopTrackingTouch(seekBar: SeekBar?) {
+    }
+
 
 }

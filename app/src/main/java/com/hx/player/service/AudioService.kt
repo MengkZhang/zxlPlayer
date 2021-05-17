@@ -47,7 +47,20 @@ class AudioService : Service() {
         return audioBinder
     }
 
-    inner class AudioBinder : Binder(), IService, MediaPlayer.OnPreparedListener {
+    inner class AudioBinder : Binder(), IService, MediaPlayer.OnPreparedListener,
+        MediaPlayer.OnCompletionListener {
+        override fun seekTo(progress: Int) {
+            mediaPlayer?.seekTo(progress)
+        }
+
+        /**
+         * 播放完成监听
+         */
+        override fun onCompletion(mp: MediaPlayer?) {
+            //自动播放下一曲
+            autoPlayNext()
+        }
+
 
         /**
          * 获取总进度
@@ -63,6 +76,9 @@ class AudioService : Service() {
             return mediaPlayer?.currentPosition ?: 0
         }
 
+        /**
+         * 更新播放状态
+         */
         override fun updatePlayState() {
             //获取当前播放状态
             val isPlay = isPlaying()
@@ -79,10 +95,16 @@ class AudioService : Service() {
 
         }
 
+        /**
+         * 是否正在 播放
+         */
         override fun isPlaying(): Boolean? {
             return mediaPlayer?.isPlaying
         }
 
+        /**
+         * 准备播放
+         */
         override fun onPrepared(mp: MediaPlayer?) {
             //播放音乐
             mediaPlayer?.start()
@@ -100,6 +122,7 @@ class AudioService : Service() {
             mediaPlayer = MediaPlayer()
             mediaPlayer?.let {
                 it.setOnPreparedListener(this)
+                it.setOnCompletionListener(this)
                 it.setDataSource(list?.get(position)?.data)
                 it.prepareAsync()
             }
@@ -110,6 +133,19 @@ class AudioService : Service() {
          */
         private fun notifyChangeUI(value: AudioBean?) {
             LiveEventBus.get(EventBusConstant.NOTIFY_CHANGE_UI).post(value)
+        }
+
+        /**
+         * 自动播放下一曲
+         */
+        private fun autoPlayNext() {
+            if (position == (list?.size ?: 1) - 1) {
+                position = 0
+            } else {
+                position++
+            }
+            playItem()
+
         }
 
     }

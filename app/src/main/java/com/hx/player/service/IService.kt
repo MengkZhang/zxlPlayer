@@ -44,5 +44,15 @@ interface IService {
      */
     fun playPre()
 
+    /**
+     * 更新播放模式
+     */
+    fun updatePlayMode()
+
+    /**
+     * 获取播放模式
+     */
+    fun getPlayMode(): Int
+
 
 }

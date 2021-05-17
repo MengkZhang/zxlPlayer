@@ -1,6 +1,7 @@
 package com.hx.player.service
 
 import android.app.Service
+import android.content.Context
 import android.content.Intent
 import android.media.MediaPlayer
 import android.os.Binder
@@ -8,6 +9,8 @@ import android.os.IBinder
 import com.hx.player.config.EventBusConstant
 import com.hx.player.model.AudioBean
 import com.jeremyliao.liveeventbus.LiveEventBus
+import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * Desc
@@ -23,9 +26,22 @@ class AudioService : Service() {
     private var position: Int = -2
     private var mediaPlayer: MediaPlayer? = null
     private val audioBinder by lazy { AudioBinder() }
+    private val sp by lazy { getSharedPreferences("config", Context.MODE_PRIVATE) }
+    private var mode = MODE_ALL
+
+    companion object {
+        //列表循环
+        val MODE_ALL = 1
+        //单曲循环
+        val MODE_SINGLE = 2
+        //随机播放
+        val MODE_RANDOM = 3
+    }
 
     override fun onCreate() {
         super.onCreate()
+        //获取播放模式
+        mode = sp.getInt("mode", MODE_ALL)
     }
 
     /**
@@ -59,16 +75,47 @@ class AudioService : Service() {
         MediaPlayer.OnCompletionListener {
 
         /**
+         * 获取播放模式
+         */
+        override fun getPlayMode(): Int {
+            return mode
+        }
+
+        /**
+         * 更新播放模式
+         */
+        override fun updatePlayMode() {
+            when (mode) {
+                MODE_ALL -> mode = MODE_SINGLE
+                MODE_SINGLE -> mode = MODE_RANDOM
+                MODE_RANDOM -> mode = MODE_ALL
+            }
+            sp.edit().putInt("mode", mode)?.apply()
+        }
+
+        /**
          * 播放上一曲
          */
         override fun playPre() {
             list?.let {
-                if (position == 0) {
-                    position = it.size - 1
-                } else {
-                    position--
+                when(mode) {
+                    MODE_RANDOM -> position = Random().nextInt(it.size - 1)
+                    else -> {
+                        if (position == 0) {
+                            position = it.size - 1
+                        } else {
+                            position--
+                        }
+                    }
                 }
             }
+//            list?.let {
+//                if (position == 0) {
+//                    position = it.size - 1
+//                } else {
+//                    position--
+//                }
+//            }
             playItem()
 
         }
@@ -78,8 +125,14 @@ class AudioService : Service() {
          */
         override fun playNext() {
             list?.let {
-                position = (position + 1) % it.size
+                when (mode) {
+                    MODE_RANDOM -> position = Random().nextInt(it.size - 1)
+                    else -> position = (position + 1) % it.size
+                }
             }
+//            list?.let {
+//                position = (position + 1) % it.size
+//            }
             playItem()
 
         }
@@ -177,11 +230,15 @@ class AudioService : Service() {
          * 自动播放下一曲
          */
         private fun autoPlayNext() {
-            if (position == (list?.size ?: 1) - 1) {
-                position = 0
-            } else {
-                position++
+            when (mode) {
+                MODE_ALL -> list?.let { position = (position + 1) % it.size }
+                MODE_RANDOM -> list?.let { position = Random().nextInt(it.size) }
             }
+//            if (position == (list?.size ?: 1) - 1) {
+//                position = 0
+//            } else {
+//                position++
+//            }
             playItem()
 
         }

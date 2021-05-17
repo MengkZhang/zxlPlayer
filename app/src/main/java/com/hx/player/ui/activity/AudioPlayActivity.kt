@@ -61,6 +61,7 @@ class AudioPlayActivity : BaseActivity(), View.OnClickListener, SeekBar.OnSeekBa
         back.setOnClickListener(this)
         next.setOnClickListener(this)
         pre.setOnClickListener(this)
+        mode.setOnClickListener(this)
         progress_sk.setOnSeekBarChangeListener(this)
         initEventBus()
     }
@@ -98,6 +99,8 @@ class AudioPlayActivity : BaseActivity(), View.OnClickListener, SeekBar.OnSeekBa
         progress_sk?.max = duration
         //更新播放进度
         startUpdateProgress()
+        //更新播放模式按钮
+        updatePlayModeButton()
 
     }
 
@@ -155,6 +158,32 @@ class AudioPlayActivity : BaseActivity(), View.OnClickListener, SeekBar.OnSeekBa
             R.id.back -> finish()
             R.id.next -> iService?.playNext()
             R.id.pre -> iService?.playPre()
+            R.id.mode -> updatePlayMode()
+        }
+
+    }
+
+    /**
+     * 更新播放模式
+     */
+    private fun updatePlayMode() {
+        //修改Service中的播放模式
+        iService?.updatePlayMode()
+        //修改界面图标
+        updatePlayModeButton()
+
+    }
+
+    /**
+     * 更新播放模式界面
+     */
+    private fun updatePlayModeButton() {
+        iService?.let {
+            when (it.getPlayMode()) {
+                AudioService.MODE_ALL -> mode.setImageResource(R.drawable.selector_btn_playmode_order)
+                AudioService.MODE_SINGLE -> mode.setImageResource(R.drawable.selector_btn_playmode_single)
+                AudioService.MODE_RANDOM -> mode.setImageResource(R.drawable.selector_btn_playmode_random)
+            }
         }
 
     }

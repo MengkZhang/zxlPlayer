@@ -1,11 +1,14 @@
 package com.hx.player.ui.activity
 
+import android.annotation.SuppressLint
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
 import android.graphics.drawable.AnimationDrawable
+import android.os.Handler
 import android.os.IBinder
+import android.os.Message
 import android.view.View
 import androidx.lifecycle.Observer
 import com.hx.player.R
@@ -14,10 +17,13 @@ import com.hx.player.config.EventBusConstant
 import com.hx.player.model.AudioBean
 import com.hx.player.service.AudioService
 import com.hx.player.service.IService
+import com.hx.player.utils.StringUtil
 import com.jeremyliao.liveeventbus.LiveEventBus
 import kotlinx.android.synthetic.main.activity_music_player_bottom.*
 import kotlinx.android.synthetic.main.activity_music_player_middle.*
 import kotlinx.android.synthetic.main.activity_music_player_top.*
+import java.lang.ref.WeakReference
+
 
 /**
  * 音乐播放页
@@ -29,6 +35,8 @@ class AudioPlayActivity : BaseActivity(), View.OnClickListener {
     private val anim by lazy { audio_anim.drawable as AnimationDrawable }
     private var iService: IService? = null
     private var audioBean: AudioBean? = null
+    private var duration: Int = 0
+    private val MSG_PROGRESS = 0
 
     override fun getLayoutView(): Int {
         return R.layout.activity_audio_player
@@ -45,7 +53,6 @@ class AudioPlayActivity : BaseActivity(), View.OnClickListener {
         startService(sIntent)
         bindService(sIntent, connection, Context.BIND_AUTO_CREATE)
 
-
     }
 
     override fun initListener() {
@@ -53,6 +60,16 @@ class AudioPlayActivity : BaseActivity(), View.OnClickListener {
         state.setOnClickListener(this)
         back.setOnClickListener(this)
         initEventBus()
+    }
+
+    private val handler = @SuppressLint("HandlerLeak")
+    object : Handler() {
+        override fun handleMessage(msg: Message) {
+            super.handleMessage(msg)
+            if (msg.what == MSG_PROGRESS) {
+                startUpdateProgress()
+            }
+        }
     }
 
     private fun initEventBus() {
@@ -73,7 +90,35 @@ class AudioPlayActivity : BaseActivity(), View.OnClickListener {
         //更新帧动画
         anim.start()
         //获取总进度
-        iService?.getDuration()
+        duration = iService?.getDuration() ?: 0
+        //设置最大进度
+        progress_sk?.max = duration
+        //更新播放进度
+        startUpdateProgress()
+
+    }
+
+    /**
+     * 更新播放进度
+     */
+    private fun startUpdateProgress() {
+        val progress = iService?.getProgress() ?: 0
+        //更新进度数据
+        updateProgress(progress)
+        //定时发送获取进度
+        handler.sendEmptyMessage(MSG_PROGRESS)
+
+    }
+
+    /**
+     * 更新进度
+     */
+    private fun updateProgress(pro: Int) {
+        //更新进度数值
+        progress.text = StringUtil.parseDuration(pro) + "/" + StringUtil.parseDuration(duration)
+        //更新进度条
+        progress_sk.progress = pro
+        //定时获取播放进度
 
     }
 
@@ -96,6 +141,7 @@ class AudioPlayActivity : BaseActivity(), View.OnClickListener {
     override fun onDestroy() {
         super.onDestroy()
         unbindService(connection)
+        handler.removeCallbacksAndMessages(null)
     }
 
     override fun onClick(v: View?) {
@@ -130,10 +176,12 @@ class AudioPlayActivity : BaseActivity(), View.OnClickListener {
                 //正在播放 展示播放的按钮
                 state.setImageResource(R.drawable.selector_btn_audio_play)
                 anim.start()
+                handler.sendEmptyMessage(MSG_PROGRESS)
             } else {
                 //正在暂停 展示暂停的按钮
                 state.setImageResource(R.drawable.selector_btn_audio_pause)
                 anim.stop()
+                handler.removeMessages(MSG_PROGRESS)
             }
         }
     }

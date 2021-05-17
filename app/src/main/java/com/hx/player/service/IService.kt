@@ -22,10 +22,12 @@ interface IService {
     /**
      * 获取总进度
      */
-    fun getDuration(): Int
+    fun getDuration(): Int?
 
     /**
      * 获取当前进度
      */
-    fun getProgress(): Int
+    fun getProgress(): Int?
+
+
 }

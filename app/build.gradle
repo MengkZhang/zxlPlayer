@@ -5,6 +5,20 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
 android {
+    signingConfigs {
+        release {
+            storeFile file('zxlplayer.jks')
+            storePassword 'zxl2021'
+            keyAlias = 'zxlplayer'
+            keyPassword 'zxl2021'
+        }
+        debug {
+            storeFile file('zxlplayer.jks')
+            storePassword 'zxl2021'
+            keyAlias = 'zxlplayer'
+            keyPassword 'zxl2021'
+        }
+    }
     compileSdkVersion 30
     buildToolsVersion "30.0.2"
     defaultConfig {
@@ -14,6 +28,7 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        signingConfig signingConfigs.release
     }
     buildTypes {
         release {

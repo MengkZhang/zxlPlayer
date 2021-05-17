@@ -20,7 +20,7 @@ class AudioService : Service() {
 
 
     private var list: ArrayList<AudioBean>? = null
-    private var position: Int = -1
+    private var position: Int = -2
     private var mediaPlayer: MediaPlayer? = null
     private val audioBinder by lazy { AudioBinder() }
 
@@ -36,10 +36,18 @@ class AudioService : Service() {
      *START_REDELIVER_INTENT service强制杀死之后 会尝试重新启动service  会传递原来的intent
      */
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        list = intent?.getParcelableArrayListExtra("list")
-        position = intent?.getIntExtra("position", -1) ?: -1
-        //开始播放
-        audioBinder.playItem()
+        val pos = intent?.getIntExtra("position", -1) ?: -1
+        if (pos != position) {
+            position = pos
+            //要播放的和当前播放的不是同一个条目
+            list = intent?.getParcelableArrayListExtra("list")
+            //开始播放
+            audioBinder.playItem()
+        } else {
+            //是同一首歌 直接更新界面
+            audioBinder.notifyChangeUI()
+
+        }
         return START_NOT_STICKY
     }
 
@@ -49,6 +57,36 @@ class AudioService : Service() {
 
     inner class AudioBinder : Binder(), IService, MediaPlayer.OnPreparedListener,
         MediaPlayer.OnCompletionListener {
+
+        /**
+         * 播放上一曲
+         */
+        override fun playPre() {
+            list?.let {
+                if (position == 0) {
+                    position = it.size - 1
+                } else {
+                    position--
+                }
+            }
+            playItem()
+
+        }
+
+        /**
+         * 播放下一曲
+         */
+        override fun playNext() {
+            list?.let {
+                position = (position + 1) % it.size
+            }
+            playItem()
+
+        }
+
+        /**
+         * 播放进度位置
+         */
         override fun seekTo(progress: Int) {
             mediaPlayer?.seekTo(progress)
         }
@@ -109,7 +147,7 @@ class AudioService : Service() {
             //播放音乐
             mediaPlayer?.start()
             //通知界面更新
-            notifyChangeUI(list?.get(position))
+            notifyChangeUI()
         }
 
         override fun playItem() {
@@ -131,8 +169,8 @@ class AudioService : Service() {
         /**
          * 通知界面更新UI
          */
-        private fun notifyChangeUI(value: AudioBean?) {
-            LiveEventBus.get(EventBusConstant.NOTIFY_CHANGE_UI).post(value)
+        fun notifyChangeUI() {
+            LiveEventBus.get(EventBusConstant.NOTIFY_CHANGE_UI).post(list?.get(position))
         }
 
         /**

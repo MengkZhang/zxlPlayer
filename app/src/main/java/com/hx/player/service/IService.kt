@@ -34,5 +34,15 @@ interface IService {
      */
     fun seekTo(progress: Int)
 
+    /**
+     * 播放下一曲
+     */
+    fun playNext()
+
+    /**
+     * 播放上一曲
+     */
+    fun playPre()
+
 
 }

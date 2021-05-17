@@ -50,8 +50,8 @@ class AudioPlayActivity : BaseActivity(), View.OnClickListener, SeekBar.OnSeekBa
         sIntent.putExtra("list", list)
         sIntent.putExtra("position", position)
         //开启服务 绑定服务
-        startService(sIntent)
         bindService(sIntent, connection, Context.BIND_AUTO_CREATE)
+        startService(sIntent)
 
     }
 
@@ -59,6 +59,8 @@ class AudioPlayActivity : BaseActivity(), View.OnClickListener, SeekBar.OnSeekBa
         super.initListener()
         state.setOnClickListener(this)
         back.setOnClickListener(this)
+        next.setOnClickListener(this)
+        pre.setOnClickListener(this)
         progress_sk.setOnSeekBarChangeListener(this)
         initEventBus()
     }
@@ -151,6 +153,8 @@ class AudioPlayActivity : BaseActivity(), View.OnClickListener, SeekBar.OnSeekBa
         when (v?.id) {
             R.id.state -> updatePlayState()
             R.id.back -> finish()
+            R.id.next -> iService?.playNext()
+            R.id.pre -> iService?.playPre()
         }
 
     }

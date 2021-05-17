@@ -84,6 +84,12 @@ class AudioService : Service() {
         }
 
         override fun playItem() {
+            //重置media 解决叠加播放的bug
+            if (mediaPlayer != null) {
+                mediaPlayer?.reset()
+                mediaPlayer?.release()
+                mediaPlayer = null
+            }
             mediaPlayer = MediaPlayer()
             mediaPlayer?.let {
                 it.setOnPreparedListener(this)

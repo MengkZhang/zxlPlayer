@@ -39,8 +39,8 @@ class MvFragment : BaseFragment(), MvView {
     }
 
     override fun loadSuccess(data: List<VideoTab>?) {
-        viewPager.adapter = MvPageAdapter(context, data, childFragmentManager)
-        tabLayout.setupWithViewPager(viewPager)
+        viewPager?.adapter = MvPageAdapter(context, data, childFragmentManager)
+        tabLayout?.setupWithViewPager(viewPager)
     }
 
 }

@@ -69,8 +69,7 @@ class AudioPlayActivity : BaseActivity(), View.OnClickListener {
         audio_title.text = audioBean?.display_name
         artist.text = audioBean?.artist
         //跟新播放按钮状态
-        state.setImageResource(R.drawable.selector_btn_audio_play)
-//        updatePlayState()
+        updatePlayStateButton()
         //更新帧动画
         anim.start()
         //获取总进度

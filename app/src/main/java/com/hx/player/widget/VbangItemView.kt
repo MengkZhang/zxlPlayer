@@ -7,6 +7,7 @@ import android.view.View
 import android.widget.RelativeLayout
 import com.hx.player.R
 import com.hx.player.model.AudioBean
+import com.hx.player.model.bmobModel.MusicList
 import kotlinx.android.synthetic.main.item_vbang.view.*
 
 /**
@@ -39,5 +40,14 @@ class VbangItemView : RelativeLayout {
         artist.text = itemBean.artist
         //歌曲大小
         size.text = Formatter.formatFileSize(context, itemBean.size)
+    }
+
+    fun setData(itemBean: MusicList) {
+        //歌曲名
+        title.text = itemBean.title
+        //歌手名
+        artist.text = itemBean.author
+        //歌曲大小
+        size.text = itemBean.size
     }
 }

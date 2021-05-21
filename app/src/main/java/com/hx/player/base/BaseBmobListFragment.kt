@@ -23,6 +23,7 @@ abstract class BaseBmobListFragment<ITEMBEAN, ITEMVIEW : View> : BaseFragment(),
 
 
     protected val presenter by lazy { getSpecialPresenter() }
+    protected var list: List<ITEMBEAN>? = null
 
     protected val adapter by lazy { getSpecialAdapter() }
     private var index = 1
@@ -80,6 +81,7 @@ abstract class BaseBmobListFragment<ITEMBEAN, ITEMVIEW : View> : BaseFragment(),
     override fun loadSuccess(data: List<ITEMBEAN>?) {
         refreshLayout?.isRefreshing = false
         adapter.updateData((data))
+        this.list = data
 
     }
 
@@ -87,7 +89,6 @@ abstract class BaseBmobListFragment<ITEMBEAN, ITEMVIEW : View> : BaseFragment(),
         refreshLayout?.isRefreshing = false
         adapter.loadMoreData((data))
     }
-
 
 
 }

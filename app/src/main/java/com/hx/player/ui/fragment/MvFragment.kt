@@ -1,9 +1,6 @@
 package com.hx.player.ui.fragment
 
-import android.graphics.Color
-import android.view.Gravity
 import android.view.View
-import android.widget.TextView
 import com.hx.player.R
 import com.hx.player.adapter.MvPageAdapter
 import com.hx.player.base.BaseFragment

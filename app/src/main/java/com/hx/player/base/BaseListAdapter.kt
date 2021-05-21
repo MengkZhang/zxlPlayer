@@ -54,6 +54,7 @@ abstract class BaseListAdapter<ITEMBEAN, ITEMVIEW : View> :
 
         itemView.setOnClickListener {
             listener?.invoke(data)
+            listeners?.invoke(position)
         }
     }
 
@@ -62,6 +63,13 @@ abstract class BaseListAdapter<ITEMBEAN, ITEMVIEW : View> :
 
     fun setMyListener(listener: (itemBean: ITEMBEAN) -> Unit) {
         this.listener = listener
+    }
+
+    //定义函数类型变量
+    var listeners: ((position: Int) -> Unit)? = null
+
+    fun setMyListeners(listener: (position: Int) -> Unit) {
+        this.listeners = listener
     }
 
 

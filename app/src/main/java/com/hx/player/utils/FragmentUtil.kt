@@ -2,10 +2,7 @@ package com.hx.player.utils
 
 import androidx.fragment.app.Fragment
 import com.hx.player.R
-import com.hx.player.ui.fragment.HomeFragment
-import com.hx.player.ui.fragment.MvFragment
-import com.hx.player.ui.fragment.VBangFragment
-import com.hx.player.ui.fragment.YueDanFragment
+import com.hx.player.ui.fragment.*
 
 /**
  * Desc 单例

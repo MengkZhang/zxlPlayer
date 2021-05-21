@@ -3,9 +3,11 @@ package com.hx.player.service
 import android.app.Service
 import android.content.Context
 import android.content.Intent
+import android.media.AudioManager
 import android.media.MediaPlayer
 import android.os.Binder
 import android.os.IBinder
+import android.util.Log
 import com.hx.player.config.EventBusConstant
 import com.hx.player.model.AudioBean
 import com.jeremyliao.liveeventbus.LiveEventBus
@@ -98,7 +100,7 @@ class AudioService : Service() {
          */
         override fun playPre() {
             list?.let {
-                when(mode) {
+                when (mode) {
                     MODE_RANDOM -> position = Random().nextInt(it.size - 1)
                     else -> {
                         if (position == 0) {
@@ -197,6 +199,7 @@ class AudioService : Service() {
          * 准备播放
          */
         override fun onPrepared(mp: MediaPlayer?) {
+            mp?.start()
             //播放音乐
             mediaPlayer?.start()
             //通知界面更新
@@ -211,10 +214,13 @@ class AudioService : Service() {
                 mediaPlayer = null
             }
             mediaPlayer = MediaPlayer()
+            val data = list?.get(position)?.data
+            Log.e("===z", "data=$data")
             mediaPlayer?.let {
+                it.setAudioStreamType(AudioManager.STREAM_MUSIC)
                 it.setOnPreparedListener(this)
                 it.setOnCompletionListener(this)
-                it.setDataSource(list?.get(position)?.data)
+                it.setDataSource(data)
                 it.prepareAsync()
             }
         }

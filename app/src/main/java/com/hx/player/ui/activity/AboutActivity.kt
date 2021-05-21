@@ -43,6 +43,42 @@ class AboutActivity : BaseActivity(), ToolBarManager {
         addData()
         getTestMvTabEvent()
         getTestVideoListEvent()
+        getMusic()
+    }
+
+    private fun getMusic() {
+
+        //MusicList
+        btnGetMusicList.setOnClickListener {
+            val bmobQuery = BmobQuery<MusicList>()
+
+            bmobQuery.findObjects(object : FindListener<MusicList>() {
+                override fun done(list: MutableList<MusicList>?, e: BmobException?) {
+                    if (e == null) {
+                        list?.let {
+                            Log.e("===z ", "size=" + list.size)
+                            Log.e("===z ", "title=" + list[0].title)
+                            Log.e("===z ", "audio=" + list[0].audio)
+
+
+//                            it.forEach { musicList ->
+//                                val audio = musicList.audio
+//                                Log.e("===z ", "audio=$audio")
+//                                Log.e("===z ", "title=$musicList.title")
+//
+//                            }
+                        }
+
+                    } else {
+                        val message = e.message
+                        message?.let {
+                            myToast(message)
+                        }
+                    }
+
+                }
+            })
+        }
     }
 
     private fun getTestVideoListEvent() {
